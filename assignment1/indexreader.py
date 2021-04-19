@@ -16,8 +16,8 @@ class IndexReader:
             print(f'Number of documents containing term: %s' % doc_frequency)
             print(f'Term frequency in corpus: %s' % total_frequency)
         elif '--doc' in self.arguments and '--term' not in self.arguments:
-            docid = self._get_id('data/docids.txt')
-            distinct_terms, total_terms = self._get_doc_info(docid, self.arguments[1])
+            docid = self._get_id('data/docids.txt', self.arguments[1])
+            distinct_terms, total_terms = self._get_doc_info(docid)
             print(f'Listing for document: %s' % self.arguments[1])
             print(f'DOCID: %s' % docid)
             print(f'Distinct terms: %s' % distinct_terms)
@@ -70,8 +70,8 @@ class IndexReader:
         with open('data/term_index.txt', 'r') as f:
             for line in f:
                 if doc_string in line:
-                    for item in line.split():
-                        if doc_string == item[:2]:
+                    for item in line.split()[1:]:
+                        if docid == item.split(':')[0]:
                             total_terms += 1
                             distinct_terms.add(line.split()[0])
 
@@ -87,8 +87,9 @@ class IndexReader:
         with open('data/term_info.txt', 'r') as f:
             for line in f:
                 if line.startswith(termid):
-                    total_frequency = line.split()[3]
-                    doc_frequency = line.split()[2]
+                    if termid == line.split()[0]:
+                        total_frequency = line.split()[3]
+                        doc_frequency = line.split()[2]
 
         if total_frequency is None or doc_frequency is None:
             raise(ValueError)

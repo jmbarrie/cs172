@@ -3,7 +3,6 @@ import re
 import os
 import zipfile
 import string
-import json
 
 def create_stop_words_list(file_name):
     # Create list of stop words for comparison
@@ -81,8 +80,8 @@ doc_regex = re.compile("<DOC>.*?</DOC>", re.DOTALL)
 docno_regex = re.compile("<DOCNO>.*?</DOCNO>")
 text_regex = re.compile("<TEXT>.*?</TEXT>", re.DOTALL)
 
-# with zipfile.ZipFile("ap89_collection_small.zip", 'r') as zip_ref:
-#     zip_ref.extractall()
+with zipfile.ZipFile("ap89_collection_small.zip", 'r') as zip_ref:
+    zip_ref.extractall()
    
 # Retrieve the names of all files to be indexed in folder ./ap89_collection_small of the current directory
 for dir_path, dir_names, file_names in os.walk("ap89_collection_small"):
