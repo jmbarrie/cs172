@@ -7,6 +7,7 @@ class TermInfo:
 
     def create_term_info_dict(self):
         with open('data/term_index.txt', 'r') as f:
+            offset = f.tell()
             for line in iter(f.readline, ''):
                 line_list = line.strip().split('\t')
                 total_frequency = len(line_list) - 1
@@ -14,7 +15,8 @@ class TermInfo:
                 for item in line_list[1:]:
                     doc_set.add(item.split(':')[0])
 
-                self.term_info[line_list[0]] = [f.tell(), total_frequency, len(doc_set)]
+                self.term_info[line_list[0]] = [offset, total_frequency, len(doc_set)]
+                offset = f.tell()
 
     def write_term_info_file(self):
         with open(self.term_info_file, 'w') as f:

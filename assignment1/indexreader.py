@@ -9,7 +9,7 @@ class IndexReader:
 
     def run_command(self):
         if '--term' in self.arguments and '--doc' not in self.arguments:
-            termid = self._get_id('data/termids.txt')
+            termid = self._get_id('data/termids.txt', self.arguments[1])
             doc_frequency, total_frequency = self._get_term_info(termid)
             print(f'Listing for term: %s' % self.arguments[1])
             print(f'TERMID: %s' % termid)
@@ -17,15 +17,51 @@ class IndexReader:
             print(f'Term frequency in corpus: %s' % total_frequency)
         elif '--doc' in self.arguments and '--term' not in self.arguments:
             docid = self._get_id('data/docids.txt')
-            distinct_terms, total_terms = self._get_doc_info(docid)
+            distinct_terms, total_terms = self._get_doc_info(docid, self.arguments[1])
             print(f'Listing for document: %s' % self.arguments[1])
             print(f'DOCID: %s' % docid)
             print(f'Distinct terms: %s' % distinct_terms)
             print(f'Total terms: %s' % total_terms)
         elif '--doc' in self.arguments and '--term' in self.arguments:
-            pass
+            term = self.arguments[self.arguments.index('--term') + 1]
+            document = self.arguments[self.arguments.index('--doc') + 1]
+            termid = self._get_id('data/termids.txt', term)
+            docid = self._get_id('data/docids.txt', document)
+            term_frequency = 0
+            positions = 0
+            term_frequency, positions = self._get_specific_term_in_doc_info(docid, termid)
+            print(f'Inverted list for term: %s' % term)
+            print(f'In document: %s' % document)
+            print(f'TERMID: %s' % termid)
+            print(f'DOCID: %s' % docid)
+            print(f'Term frequency in document: %s' % term_frequency)
+            print(f'Positions: %s' % ', '.join(positions))
         else:
             print('Invalid command provided')
+
+    def _get_specific_term_in_doc_info(self, docid, termid):
+        term_frequency = 0
+        positions = []
+        offset = 0
+
+        with open('data/term_info.txt', 'r') as f:
+            for line in f:
+                if line.startswith(termid):
+                    if termid == line.split()[0]:
+                        offset = int(line.split()[1])
+
+        with open('data/term_index.txt', 'r') as f:
+            f.seek(offset)
+            data = f.readline().split()
+
+        # print(data)
+        for item in data:
+            if docid == item.split(':')[0]:
+                positions.append(item.split(':')[1])
+                term_frequency += 1
+
+
+        return term_frequency, positions
 
     def _get_doc_info(self, docid):
         distinct_terms = set()
@@ -59,13 +95,14 @@ class IndexReader:
 
         return doc_frequency, total_frequency
 
-    def _get_id(self, file_name):
+    def _get_id(self, file_name, search_item):
         id = None 
         try:
             with open(file_name, 'r') as f:
                 for line in f:
-                    if self.arguments[1].lower() in line.lower():
-                        id = line.split()[0]
+                    if search_item.lower() in line.lower():
+                        if search_item.lower() == line.split()[1].lower():
+                            id = line.split()[0]
 
             if id is None:
                 raise(ValueError)
