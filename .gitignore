@@ -1,0 +1,8 @@
+*.zip
+.ipynb_checkpoints/
+venv/
+__MACOSX/
+ap89_collection_small/
+data/
+.vscode/
+.DS_STORE
