@@ -6,3 +6,6 @@ ap89_collection_small/
 data/
 .vscode/
 .DS_STORE
+tempCodeRunnerFile.py
+__pycache__/
+*.pyc
