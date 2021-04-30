@@ -11,7 +11,7 @@ from src.tokenizer import Tokenizer
 from src.terminfo import TermInfo
 
 if __name__ == "__main__":
-    tokenizer = Tokenizer()
+    tokenizer = Tokenizer('ap89_collection_small.zip')
     tokenizer.parse()
     term_info = TermInfo(['./data/term_index.txt', './data/term_info.txt'])
     term_info.create_term_info_dict()

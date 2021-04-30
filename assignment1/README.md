@@ -1,8 +1,8 @@
 # CS172 - Assignment 1 (Tokenization)
 
-## Team member 1 - Juan Barrientos
+### Team member 1 - Juan Barrientos
 
-###### Provide a short explanation of your design
+## Description
 This inverted index is implemented using Python and the provided parsing code. It is broken down
 into 3 classes: 
 
@@ -18,11 +18,13 @@ This file contains useful information for faster information retrieval from the 
 
 The `IndexReader` class is used to process user commands and retrieve information from the created documents.
 
-###### Language used, how to run your code, if you attempted the extra credit (stemming), etc. 
+## Usage
 To use this package it is a simple process:
 
 1.  Build indexes
 2.  Run queries
+
+NOTE: It is assumed that all of these commands are executed from inside the `/cs172/assignment1/` directory.
 
 To build the required indexes, simply execute the `build.py` script. This will use the the `Tokenizer` and the `TermInfo` classes to build the required indexes.
 

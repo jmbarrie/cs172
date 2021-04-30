@@ -1,4 +1,3 @@
-*.zip
 .ipynb_checkpoints/
 venv/
 __MACOSX/
