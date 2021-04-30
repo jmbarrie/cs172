@@ -1,8 +1,8 @@
-import enum
 import re
 import os
 import zipfile
 import string
+from nltk.stem import PorterStemmer
 
 class Tokenizer:
     def __init__(self, zip_file=None):
@@ -65,13 +65,15 @@ class Tokenizer:
         Creates the term index, doc index, and the corpus index then stores as member variables.
         '''
         position = 0
+        ps = PorterStemmer()
 
         for word in text.split():
             word_new_status = False
 
             if word not in self.stop_words:
-                if word not in self.term_id_dict:
-                    self.term_id_dict[word] = self.term_id
+                stemmed_word = ps.stem(word)
+                if stemmed_word not in self.term_id_dict:
+                    self.term_id_dict[stemmed_word] = self.term_id
                     self.term_id += 1
                     word_new_status = True
             
@@ -79,7 +81,7 @@ class Tokenizer:
                     self.doc_id_dict[document] = self.doc_id
                     self.doc_id += 1
 
-                self.corpus_index.setdefault(word, []).append([self.doc_id_dict[document], position, self.term_id_dict[word]])
+                self.corpus_index.setdefault(stemmed_word, []).append([self.doc_id_dict[document], position, self.term_id_dict[stemmed_word]])
 
             position += 1
 

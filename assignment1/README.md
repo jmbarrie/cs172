@@ -19,6 +19,8 @@ This file contains useful information for faster information retrieval from the 
 The `IndexReader` class is used to process user commands and retrieve information from the created documents.
 
 ## Usage
+All code is written in Python3 and the only external library is `PortStemmer` which is used for stemming.
+
 To use this package it is a simple process:
 
 1.  Build indexes
@@ -45,3 +47,5 @@ Currently implemented commands are:
 1. `--term [argument]`: returns information regarding the specified term.
 2. `--doc [argument]`: returns information regarding the specified document.
 3. `--doc [argument] --term [argument]`: returns information regarding the specified term found in the specified document.
+
+Extra credit that was attempted: stemming and creation of documents. Both of these features can be found in the `Tokenizer` class. Stemming was implemented using `nltk`'s `PortStemmer`.
