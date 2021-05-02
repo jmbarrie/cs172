@@ -11,6 +11,9 @@ from src.tokenizer import Tokenizer
 from src.terminfo import TermInfo
 
 if __name__ == "__main__":
+    # To run it on a small subset of documents (must be deleted manually from ap89_collection_small directory)
+    # tokenizer = Tokenizer()
+    # To run it on the entire corpus
     tokenizer = Tokenizer('ap89_collection_small.zip')
     tokenizer.parse()
     term_info = TermInfo(['./data/term_index.txt', './data/term_info.txt'])

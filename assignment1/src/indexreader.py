@@ -1,4 +1,5 @@
 import re
+from nltk.stem import PorterStemmer
 
 class IndexReader:
     def __init__(self, args):
@@ -8,8 +9,10 @@ class IndexReader:
         print(self.arguments)
 
     def run_command(self):
+        ps = PorterStemmer()
+
         if '--term' in self.arguments and '--doc' not in self.arguments:
-            termid = self._get_id('data/termids.txt', self.arguments[1])
+            termid = self._get_id('data/termids.txt', ps.stem(self.arguments[1]))
             doc_frequency, total_frequency = self._get_term_info(termid)
             print(f'Listing for term: %s' % self.arguments[1])
             print(f'TERMID: %s' % termid)
@@ -23,7 +26,7 @@ class IndexReader:
             print(f'Distinct terms: %s' % distinct_terms)
             print(f'Total terms: %s' % total_terms)
         elif '--doc' in self.arguments and '--term' in self.arguments:
-            term = self.arguments[self.arguments.index('--term') + 1]
+            term = ps.stem(self.arguments[self.arguments.index('--term') + 1])
             document = self.arguments[self.arguments.index('--doc') + 1]
             termid = self._get_id('data/termids.txt', term)
             docid = self._get_id('data/docids.txt', document)
@@ -54,12 +57,10 @@ class IndexReader:
             f.seek(offset)
             data = f.readline().split()
 
-        # print(data)
-        for item in data:
+        for item in data[1:]:
             if docid == item.split(':')[0]:
                 positions.append(item.split(':')[1])
                 term_frequency += 1
-
 
         return term_frequency, positions
 
