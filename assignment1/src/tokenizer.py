@@ -41,7 +41,8 @@ class Tokenizer:
                             .replace("\n", " ").lower().translate(str.maketrans('', '', string.punctuation))
 
                     # step 1 - lower-case words, remove punctuation, remove stop-words, etc. 
-                    self._create_indexes(text, docno)
+                    position = 0
+                    self._create_indexes(text, docno, position)
                     # step 2 - create tokens 
                     # step 3 - build index
         
@@ -54,17 +55,15 @@ class Tokenizer:
         with open(file_name, 'w') as f:
             for k, v in index.items():
                 text = str(v[-1][2])
-                for i in range(-1, len(v)):
-                    text = text + f'\t%s:%s' % (v[i][-1], v[i][1])
+                for i in range(0, len(v)):
+                    text = text + f'\t%s:%s' % (v[i][0], v[i][1])
             
-                text = text + '\n'
-                f.write(text)
+                f.write(text + '\n')
 
-    def _create_indexes(self, text, document):
+    def _create_indexes(self, text, document, position):
         '''
         Creates the term index, doc index, and the corpus index then stores as member variables.
         '''
-        position = 0
         ps = PorterStemmer()
 
         for word in text.split():
