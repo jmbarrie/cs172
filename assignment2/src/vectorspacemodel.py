@@ -6,15 +6,30 @@ class VectorSpaceModel:
         self.output_file = output_file
         self.stop_words = self._create_stopwords()
         self.queries = []
+        self.vsm = {}
 
     def vectorize(self):
         self._process_queries()
+        self._create_vsm()
     
     def _process_queries(self):
+        '''
+        Reads in the queries from the file and appends to a list.
+        '''
         with open(self.query_file, 'r') as f:
             for line in f:
                 query = line.lower().translate(str.maketrans('','', string.punctuation))
                 self.queries.append(query)
+
+    def _create_vsm(self):
+        '''
+        Creates the VSM and removes all stop words that are included in the query.
+        '''
+        for query in self.queries:
+            tokens = query.split()
+            for token in tokens[1:]:
+                if token not in self.stop_words:
+                    self.vsm.setdefault(tokens[0], []).append(token)
         
     def _create_stopwords(self):
         '''
@@ -33,5 +48,6 @@ if __name__=="__main__":
     output_f = "\data\output.txt"
     vsm = VectorSpaceModel(query_f, output_f)
     vsm.vectorize()
-    for query in vsm.queries:
-        print(query)
+    print(vsm.vsm)
+    # for query in vsm.queries:
+    #     print(query)
