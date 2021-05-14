@@ -24,7 +24,7 @@ class VectorSpaceModel:
 
     def _create_vsm(self):
         '''
-        Creates the VSM and removes all stop words that are included in the query.
+        Creates the VSM removes all stop words and stems the words that are included in the query.
 
         { 
             QueryNo: [Tokens]
@@ -49,9 +49,3 @@ class VectorSpaceModel:
                 stop_words.append(line.rstrip('\n'))
 
         return stop_words
-
-if __name__=="__main__":
-    query_f = "query_list.txt"
-    output_f = "\data\output.txt"
-    vsm = VectorSpaceModel(query_f, output_f)
-    vsm.vectorize()
