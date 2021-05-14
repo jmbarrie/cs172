@@ -1,4 +1,5 @@
 import string 
+from nltk.stem import PorterStemmer
 
 class VectorSpaceModel:
     def __init__(self, query_file, output_file):
@@ -24,12 +25,18 @@ class VectorSpaceModel:
     def _create_vsm(self):
         '''
         Creates the VSM and removes all stop words that are included in the query.
+
+        { 
+            QueryNo: [Tokens]
+        }
         '''
+        ps = PorterStemmer()
+
         for query in self.queries:
             tokens = query.split()
             for token in tokens[1:]:
                 if token not in self.stop_words:
-                    self.vsm.setdefault(tokens[0], []).append(token)
+                    self.vsm.setdefault(tokens[0], []).append(ps.stem(token))
         
     def _create_stopwords(self):
         '''
@@ -48,6 +55,3 @@ if __name__=="__main__":
     output_f = "\data\output.txt"
     vsm = VectorSpaceModel(query_f, output_f)
     vsm.vectorize()
-    print(vsm.vsm)
-    # for query in vsm.queries:
-    #     print(query)
