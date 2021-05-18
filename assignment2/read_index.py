@@ -13,5 +13,7 @@ if __name__ == "__main__":
     start = timeit.default_timer()
     ir.run_command(output=False)
     end = timeit.default_timer()
+    ir.intermediate_data['91'][-1].sort()
+    print(ir.intermediate_data['91'])
 
     print(end - start)
