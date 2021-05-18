@@ -48,9 +48,6 @@ class IndexReader:
                 self.intermediate_data[key][i].append(doc_ids_list)
             self.intermediate_data[key].append(list(query_doc_ids))
 
-    def _get_doc_frequencies(self):
-        pass
-
     def _get_doc_ids(self, term_id):
         term_doc_ids = []
         for term in self.term_index[term_id]:
