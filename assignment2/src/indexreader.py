@@ -14,8 +14,15 @@ class IndexReader:
         self._read_term_index_file()
         self.process_intermediate_data()
 
+    @staticmethod
+    def _process_arguments(args):
+        for word in args:
+            print(word)
+
+        pass
+
     def _read_term_index_file(self):
-        with open('data/term_index.txt', 'r') as f:
+        with open('./data/term_index.txt', 'r') as f:
             lines = f.readlines()
 
         for line in lines:
@@ -23,18 +30,15 @@ class IndexReader:
             self.term_index[split_line[0]] = split_line[1:]
 
     def process_intermediate_data(self):
-        # TODO: Create a way for assignment 2 to query for complex results e.g. multiple things
-        '''
+        """
         Process:
             1. Get the term_id, store it
             2. Use the term_id to get the doc_ids for the entire corpus
-            2. Do a --doc and --term query for EACH document to compute the cosine similarity
-
             {
-                "query": [word, term_id, [doc1, ... , docn]]
+                "query": [word, term_id, [doc1, ... , docn]], ..., [all docs of query],
             }
-        '''
-
+        """
+        ps = PorterStemmer()
         for key, values in self.arguments.items():
             for term in values:
                 term_id = self._get_id('data/termids.txt', term)
@@ -50,9 +54,11 @@ class IndexReader:
 
     def _get_doc_ids(self, term_id):
         term_doc_ids = []
-        for term in self.term_index[term_id]:
-            doc = term.split(':')[0]
-            term_doc_ids.append(doc)
+        if term_id is not None:
+            for term in self.term_index[term_id]:
+                doc = term.split(':')[0]
+                term_doc_ids.append(doc)
+        
         return term_doc_ids
                 
     def assignment_1_results(self):
@@ -170,6 +176,6 @@ class IndexReader:
             if id is None:
                 raise(ValueError)
         except ValueError:
-            print('Word or document not found')
+            print('%s not found in term index' % search_item)
 
         return id
