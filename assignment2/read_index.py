@@ -19,7 +19,7 @@ if __name__ == "__main__":
     # print(ranker.all_query_weights)
 
     # print(end - start)
-    print(ir.print_args())
+    # print(ir.print_args())
     # 16 AP891229-0148
     # 2514 16 AP891229-0105 confirmed 16
     # 2237 16 AP891227-0033 confirmed 16
