@@ -19,7 +19,9 @@ if __name__ == "__main__":
     # print(ranker.all_query_weights)
 
     # print(end - start)
-    print(ir.intermediate_data['85'][8][1])
-
-    # 16 AP890128-0038
-    # 13
+    print(ir.print_args())
+    # 16 AP891229-0148
+    # 2514 16 AP891229-0105 confirmed 16
+    # 2237 16 AP891227-0033 confirmed 16
+    # 2557 16 AP891229-0148 confirmed 16
+    # TODO: don't forget that the bottom is 

@@ -49,7 +49,7 @@ class IndexReader:
             for i in range(len(query_term_list)):
                 doc_ids_list = self._get_doc_ids(query_term_list[i][1])
                 query_doc_ids.update(doc_ids_list)
-                self.intermediate_data[key][i].append(doc_ids_list)
+                self.intermediate_data[key][i].append(list(set(doc_ids_list)))
             self.intermediate_data[key].append(list(query_doc_ids))
 
     def _get_doc_ids(self, term_id):
