@@ -1,9 +1,11 @@
 import heapq
 from math import sqrt
 
+
 class Ranker:
-    def __init__(self, intermediate_dict):
+    def __init__(self, intermediate_dict, output_file):
         self.intermediate_data = intermediate_dict
+        self.output_file = output_file
         self.all_query_weights = {}
 
     def compute(self):
@@ -11,13 +13,16 @@ class Ranker:
             one_query_weights = []
             for i in range(len(v)):
                 all_query_docs = self.intermediate_data[k][-1]
-                one_query_weights.append(self.calculate_query_weight(self.intermediate_data[k][i], all_query_docs))
+                one_query_weights.append(self.calculate_query_weight(
+                    self.intermediate_data[k][i], all_query_docs))
             self.all_query_weights[k] = one_query_weights
 
         for k in self.intermediate_data.keys():
             query_sum_weight = self.calculate_doc_weight_sum(k)
-            cosine_similarities = self.compute_cosine_similarity(query_sum_weight, k)
-            top_ten_doc_ids, top_ten_values = self.calculate_top_ten_docs_for_query(cosine_similarities, k)
+            cosine_similarities = self.compute_cosine_similarity(
+                query_sum_weight, k)
+            top_ten_doc_ids, top_ten_values = self.calculate_top_ten_docs_for_query(
+                cosine_similarities, k)
             self._write_results(top_ten_doc_ids, top_ten_values, k)
 
     def calculate_doc_weight_sum(self, query_num):
@@ -54,7 +59,7 @@ class Ranker:
         query_length = len(self.intermediate_data[query_key][:-1])
         for query_weight in query_sum_weights:
             numerator = query_weight
-            denominator = sqrt(query_length) * sqrt(query_weight) 
+            denominator = sqrt(query_length) * sqrt(query_weight)
             cosine_similarities.append(numerator / denominator)
         return cosine_similarities
 
@@ -73,7 +78,8 @@ class Ranker:
 
         top_ten_doc_ids = []
         for value in top_ten_indices:
-            top_ten_doc_ids.append(self.intermediate_data[query_key][-1][value])
+            top_ten_doc_ids.append(
+                self.intermediate_data[query_key][-1][value])
         # print('top 10 indices: %s, len: %s' % (list(top_ten_indices), len(top_ten_indices)))
 
         return top_ten_doc_ids, top_ten_values
@@ -92,11 +98,11 @@ class Ranker:
 
         print('-' * 15)
         print('Top documents for query %s' % query_key)
-        print('top values: %s, len: %s' % (top_ten_values, len(top_ten_values)))
+        print('top values: %s, len: %s' %
+              (top_ten_values, len(top_ten_values)))
         print('top documents: %s, len: %s' % ("".join(docs), len(docs)))
 
-        with open('./data/output.txt', 'a+') as f:
+        with open(self.output_file, 'a+') as f:
             for i in range(len(top_ten_doc_ids)):
-                f.write('%s Q0 %s %s %s Exp\n' % (query_key, top_ten_doc_ids[i], i + 1, top_ten_values[i]))
-
-
+                f.write('%s Q0 %s %s %s Exp\n' %
+                        (query_key, top_ten_doc_ids[i], i + 1, top_ten_values[i]))
